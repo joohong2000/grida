@@ -28,7 +28,7 @@
     <div class="container">
         {% for project in project_list %}
         <a href="{% url 'projectapp:detail' pk=project.pk %}">
-            {% include 'projectapp/snippets/card_project.html' with project=project %}
+            {% include 'snippets/card_project.html' with project=project %}
         </a>
         {% endfor %}
     </div>
@@ -39,7 +39,7 @@
     </div>
 {% endif %}
 
-{% include 'projectapp/snippets/pagination.html' with page_obj=page_obj %}
+{% include 'snippets/pagination.html' with page_obj=page_obj %}
 
 <div style="text-align: center">
     <a href="{% url 'projectapp:create' %}" class="btn btn-dark rounded-pill mt-3 mb-3 px-3">

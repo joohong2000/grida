@@ -11,6 +11,9 @@ from django.urls import reverse, reverse_lazy
 from django.views.generic import CreateView, DetailView, UpdateView, DeleteView
 
 from accountapp.forms import AccountUpdateForm
+from django.views.generic.list import MultipleObjectMixin
+
+from articleapp.models import Article
 
 
 def hello_world(request):
@@ -39,10 +42,18 @@ class AccountCreateView(CreateView):
     success_url = reverse_lazy('accountapp:hello_world')
     template_name = 'accountapp/create.html'
 
-class AccountDetailView(DetailView):
+
+class AccountDetailView(DetailView, MultipleObjectMixin):
     model = User
     context_object_name = 'target_user'
     template_name = 'accountapp/detail.html'
+
+    paginate_by = 25
+
+    def get_context_data(self, **kwargs):
+        object_list = Article.objects.filter(writer=self.get_object())
+        return super(AccountDetailView, self).get_context_data(object_list=object_list, **kwargs)
+
 
 class AccountUpdateView(UpdateView):
     model = User
@@ -50,6 +61,7 @@ class AccountUpdateView(UpdateView):
     form_class = AccountUpdateForm
     success_url = reverse_lazy('accountapp:hello_world')
     template_name = 'accountapp/update.html'
+
 
 class AccountDeleteView(DeleteView):
     model = User
